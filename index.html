@@ -1,0 +1,306 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Oops ho sovrascritto le tue modifiche</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/simple.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/foundation.css">
+
+                <style>
+                        .reveal .slides {
+                                word-break: break-word;
+                                text-align: left;
+                        }
+                        .reveal .slides .center {
+                                text-align: center;
+                        }
+                        .reveal section * {
+                                font-weight: 800;
+                        }
+                        .list-none li {
+                                list-style-type: none;
+                        }
+                        .list-plus {
+                                list-style-type: '+ ';
+                        }
+                        .list-minus {
+                                list-style-type: '- ';
+                        }
+                        .reveal section img {
+                                border: none;
+                                box-shadow: none;
+                        }
+                        .reveal section.wall img {
+                                margin: 0;
+                        }
+                        .footer {
+                                height: 10%;
+                                width: 100%;
+                                position: absolute;
+                                bottom: 40px;
+                                display: block;
+                                text-align: center;
+                        }
+                        #hashtag {
+                                font-size: 0.8em;
+                                font-weight: 400;
+                        }
+                        .selected {
+                                background-color: #000;
+                                color: #fff;
+                        }
+                        .small {
+                                font-size: 0.6em;
+                        }
+                        code.small {
+                                font-size: 0.75em;
+                        }
+                        .reveal pre {
+                                font-size: 0.8em;
+                        }
+                        .reveal pre.noborder {
+                                border: none;
+                        }
+                        .reveal h2.upper {
+                                text-transform: uppercase;
+                        }
+                        @media print {
+                                .no-print { display: none; }
+                        }
+                        @media screen {
+                                .only-print { display: none; }
+                        }
+		</style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h2>Oops ho sovrascritto le tue modifiche</h2>
+					<br /><br />
+					<h3>Riccardo Magliocchetti</h3>
+				</section>
+				<section>
+					<h3>whoami</h3>
+					<p>Cat herder @ Maieutical Labs</p>
+					<p>Dev @ Djungle Studio</p>
+				</section>
+				<section>
+					<h3>Mai sovrascritto dati involontariamente dall'admin di Django?</h3>
+				</section>
+				<section>
+					<h3>Capita solo da admin?</h3>
+					<pre><code data-trim data-noescape class="python small">
+# processo 1                   # processo 2
+m = M.objects.get(f=”pycon22”)
+m.hi = "👋"
+                               M.objects.update(f=”pycon”)
+m.save()
+</code></pre>
+				</section>
+				<section>
+					<h2>3 possibili strategie</h2>
+				</section>
+				<section>
+					<ol>
+						<li><h3>Salvare un log delle modifiche</h3></li>
+					</ol>
+				</section>
+				<section>
+					<ol>
+						<li>Salvare un log delle modifiche</li>
+						<li><h3>Locking delle righe</h3></li>
+					</ol>
+				</section>
+				<section>
+					<ol>
+						<li>Salvare un log delle modifiche</li>
+						<li>Locking delle righe</li>
+						<li><h3>Concorrenza ottimistica</h3></li>
+					</ol>
+				</section>
+				<section>
+					<h2>Salvare un log delle modifiche</h2>
+				</section>
+				<section>
+					<p>Ad ogni aggiornamento o cancellazione di un modello serializzo la versione precedente con una versione e dei metadati.</p>
+					<p>Con lo storico delle modifiche è possibile <em>provare</em> a ripristinare i dati.</p>
+				</section>
+				<section>
+					<h3>Applicazioni per Django</h3>
+					<ul>
+						<li><a href="https://github.com/etianen/django-reversion">django-reversion</a></li>
+						<li><a href="https://github.com/dennybiasiolli/django-reversion-rest-framework">django-reversion-rest-framework</a></li>
+						<li><a href="https://github.com/jazzband/django-simple-history">django-simple-history</a></li>
+						<li><a href="https://github.com/jazzband/django-auditlog">django-auditlog</a></li>
+					</ul>
+				</section>
+				<section>
+					<h3>Salvare un log delle modifiche: recap</h3>
+					<ul>
+						<li>abbiamo un log di audit incluso</li>
+						<li>abbiamo una buona chance di ripristinare i dati</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Locking delle righe</h2>
+				</section>
+				<section>
+					<h3><a href="https://docs.djangoproject.com/en/4.0/ref/models/querysets/#select-for-update">select_for_update</a></h3>
+					<pre><code data-trim data-noescape class="sql">SELECT ... FOR UPDATE</code></pre>
+					<pre><code data-trim data-noescape class="python">
+offices = (
+    Office.objects.select_for_update()
+    .filter(city=city)
+)
+with transaction.atomic():
+    for office in offices:
+        ...
+</code></pre>
+				</section>
+				<section>
+					<h3>select_for_update</h3>
+					<ul>
+						<li>blocca la transazione per default</li>
+						<li><em>DatabaseError</em> con <em>nowait=True</em></li>
+					</ul>
+				</section>
+				<section>
+					<h3>Locking delle righe: recap</h3>
+					<ul>
+						<li>risolviamo corse critiche sull'aggiornamento</li>
+						<li>non possiamo tenere il lock troppo a lungo per mantenere concorrenza</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Concorrenza ottimistica</h2>
+				</section>
+				<section>
+					<h3>Concorrenza ottimistica</h3>
+					<p>Aggiorno solo quello che mi aspetto</p>
+					<p>⚠️  le operazioni possono non avere effetti ⚠️</p>
+				</section>
+				<section>
+					<h3>Concorrenza ottimistica in SQL</h3>
+					<pre><code data-trim data-noescape class="sql">
+UPDATE mymodel
+SET version = version + 1, ...
+WHERE id = %s AND version = %s</code></pre>
+				</section>
+				<section>
+					<h3>Implementazioni per Django</h3>
+					<ul>
+						<li><a href="https://github.com/gavinwahl/django-optimistic-lock">django-optimistic-lock</a></li>
+						<li><a href="https://github.com/saxix/django-concurrency">django-concurrency</a></li>
+					</ul>
+				</section>
+				<section>
+					<h3>Concorrenza ottimistica: recap</h3>
+					<ul>
+						<li>non prendiamo lock</li>
+						<li>dobbiamo gestire il caso in cui non vengono aggiornate righe</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Detour: concorrenza di PostgreSQL</h3>
+					<p>MVCC (Multi-Version Concurrency Control):<br>si crea una nuova riga con id di transazione maggiore e poi il <em>VACUUM</em> passa a pulire</p>
+					<p>L'id di transazione si chiama <em>xmin</em>:
+					<pre><code data-trim data-noescape class="sql">SELECT xmin from mytable LIMIT 1;</code></pre></p>
+				</section>
+				<section>
+					<h3>🎁 Bonus: una piccola applicazione</h3>
+				</section>
+				<section>
+					<h3>Problema: corsa critica tra admin e sistema ad eventi</h3>
+					<p>Condizioni</p>
+					<ul>
+						<li>basta impedire l'override di modifiche da admin</li>
+						<li>basta che funzioni su PostgreSQL</li>
+					</ul>
+				</section>
+				<section>
+					<h3><a href="https://github.com/djungle-io/django-optimistic-admin-pg">django-optimistic-admin-pg</a></h3>
+					<ul>
+						<li><em>riduce</em> la corsa critica in admin tramite concorrenza ottimistica senza modificare i modelli</li>
+						<li>semplice: due mixins da usare in totale 62 righe</li>
+					</ul>
+				</section>
+				<section>
+					<pre><code data-trim data-noescape class="python small">
+from optimisticadmin.mixins import OptimisticAdminModelFormMixin
+
+class MyModelForm(OptimisticAdminModelFormMixin, forms.ModelForm):
+    row_version = forms.IntegerField(
+        required=False, widget=forms.HiddenInput()
+    )</code></pre>
+					<pre><code data-trim data-noescape class="python small">
+from optimisticadmin.mixins import OptimisticAdminMixin
+from .forms import MyModelForm
+
+@admin.register(MyModel)
+class MyModelAdmin(OptimisticAdminMixin, admin.ModelAdmin):
+    form = MyModelForm</code></pre>
+				</section>
+				<section>
+					<h3>Conclusioni</h3>
+					<ul>
+						<li>tenere un log delle modifiche per evitare di perdere dati</li>
+						<li>usare dei lock per serializzare gli aggiornamenti</li>
+						<li>implementare un sistema di concorrenza ottimistica (facendo attenzione!)</li>
+						<li>usare una combinazione delle precedenti</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Grazie! Domande?</h2>
+					<ul>
+						<li>a<href="https://github.com/xrmx">github.com/xrmx</a></li>
+						<li>a<href="https://speakerdeck.com/xrmx">speakerdeck.com/xrmx</a></li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>Riferimenti</h3>
+					<ul>
+						<li><a href="https://linuxtut.com/en/d24d7a1c70aaae871ffd/">Articolo</a> con implementazione semplice di concorrenza ottimistica su PostgreSQL ed API con Django Rest Framework</li>
+						<li><a href="https://hakibenita.com/how-to-manage-concurrency-in-django-models">articolo</a> di Haki Benita su concorrenza pessimistica vs ottimistica</li>
+						<li><a href="https://devcenter.heroku.com/articles/postgresql-concurrency">articolo Heroku</a> su concorrenza MVCC di PostgreSQL</li>
+						<li><a href="https://www.postgresql.org/docs/14/mvcc-intro.html">Documentazione ufficiale</a> MVCC PostgreSQL</li>
+					</ul>
+				</section>
+
+	<!--
+				<section>
+					<h2></h2>
+				</section>
+	-->
+			</div>
+                        <div class="footer">
+                                <p id="hashtag" class="no-print">#PyCon22 ‧ @rmistaken</p>
+                        </div>
+
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
