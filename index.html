@@ -250,17 +250,17 @@ WHERE id = %s AND version = %s</code></pre>
 					<pre><code data-trim data-noescape class="python small">
 from optimisticadmin.mixins import OptimisticAdminModelFormMixin
 
-class MyModelForm(OptimisticAdminModelFormMixin, forms.ModelForm):
+class FooForm(OptimisticAdminModelFormMixin, forms.ModelForm):
     row_version = forms.IntegerField(
         required=False, widget=forms.HiddenInput()
     )</code></pre>
 					<pre><code data-trim data-noescape class="python small">
 from optimisticadmin.mixins import OptimisticAdminMixin
-from .forms import MyModelForm
+from .forms import FooForm
 
-@admin.register(MyModel)
-class MyModelAdmin(OptimisticAdminMixin, admin.ModelAdmin):
-    form = MyModelForm</code></pre>
+@admin.register(Foo)
+class FooAdmin(OptimisticAdminMixin, admin.ModelAdmin):
+    form = FooForm</code></pre>
 				</section>
 				<section>
 					<h3>Conclusioni</h3>
