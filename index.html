@@ -106,6 +106,17 @@ m.save()
 </code></pre>
 				</section>
 				<section>
+					<h3>In questo caso è facile</h3>
+					<pre><code data-trim data-noescape class="python small">
+# processo 1                   # processo 2
+m = M.objects.get(f=”pycon22”)
+m.hi = "👋"
+                               M.objects.update(f=”pycon”)
+m.save(update_fields=["hi"])
+</code></pre>
+</code></pre>
+				</section>
+				<section>
 					<h2>3 possibili strategie</h2>
 				</section>
 				<section>
