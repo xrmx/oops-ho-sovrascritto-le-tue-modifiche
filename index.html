@@ -100,7 +100,7 @@
 					<pre><code data-trim data-noescape class="python small">
 # processo 1                   # processo 2
 m = M.objects.get(f=”pycon22”)
-m.hi = "👋"
+m.greetings = "👋"
                                M.objects.update(f=”pycon”)
 m.save()
 </code></pre>
@@ -110,9 +110,9 @@ m.save()
 					<pre><code data-trim data-noescape class="python small">
 # processo 1                   # processo 2
 m = M.objects.get(f=”pycon22”)
-m.hi = "👋"
+m.greetings = "👋"
                                M.objects.update(f=”pycon”)
-m.save(update_fields=["hi"])
+m.save(update_fields=["greetings"])
 </code></pre>
 </code></pre>
 				</section>
