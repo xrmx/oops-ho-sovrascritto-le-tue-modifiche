@@ -166,6 +166,16 @@ m.save(update_fields=["greetings"])
 				<section>
 					<h3><a href="https://docs.djangoproject.com/en/4.0/ref/models/querysets/#select-for-update">select_for_update</a></h3>
 					<pre><code data-trim data-noescape class="sql">SELECT ... FOR UPDATE</code></pre>
+				</section>
+				<section>
+					<h3>select_for_update</h3>
+					<ul>
+						<li>blocca la transazione per default</li>
+						<li><em>DatabaseError</em> con <em>nowait=True</em></li>
+					</ul>
+				</section>
+				<section>
+					<h3>select_for_update</h3>
 					<pre><code data-trim data-noescape class="python">
 offices = (
     Office.objects.select_for_update()
@@ -175,13 +185,6 @@ with transaction.atomic():
     for office in offices:
         ...
 </code></pre>
-				</section>
-				<section>
-					<h3>select_for_update</h3>
-					<ul>
-						<li>blocca la transazione per default</li>
-						<li><em>DatabaseError</em> con <em>nowait=True</em></li>
-					</ul>
 				</section>
 				<section>
 					<h3>Locking delle righe: recap</h3>
