@@ -62,6 +62,15 @@
                         code.small {
                                 font-size: 0.75em;
                         }
+			table.small {
+				font-size: 0.8em;
+			}
+			tr, th, td {
+				border: 1px solid;
+			}
+			th {
+				background-color: #eee;
+			}
                         .reveal pre {
                                 font-size: 0.8em;
                         }
@@ -230,6 +239,7 @@ WHERE id = %s AND version = %s</code></pre>
 						<li>dobbiamo gestire il caso in cui non vengono aggiornate righe</li>
 					</ul>
 				</section>
+
 				<section>
 					<h3>Detour: concorrenza di PostgreSQL</h3>
 					<p>MVCC (Multi-Version Concurrency Control):<br>si crea una nuova riga con id di transazione maggiore e poi il <em>VACUUM</em> elimina quelle vecchie</p>
@@ -293,8 +303,45 @@ class FooAdmin(OptimisticAdminMixin, admin.ModelAdmin):
 						<li>tenere un log delle modifiche per evitare di perdere dati</li>
 						<li>usare dei lock per serializzare gli aggiornamenti</li>
 						<li>implementare un sistema di concorrenza ottimistica (facendo attenzione!)</li>
-						<li>usare una combinazione delle precedenti</li>
 					</ul>
+				</section>
+
+				<section>
+					<h3>Conclusioni</h3>
+					<table class="small">
+						<thead>
+							<th>strategia</th>
+							<th>rischio</th>
+							<th>tradeoff</th>
+							<th>quando</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Log modifiche</td>
+								<td>👍</td>
+								<td>💪</td>
+								<td>audit, recovery</td>
+							</tr>
+							<tr>
+								<td>Locking righe</td>
+								<td>👍</td>
+								<td>💪</td>
+								<td>assegnazione risorse,<br>soldi :)</td>
+							</tr>
+							<tr>
+								<td>Concorrenza<br>ottimistica</td>
+								<td>⚠️</td>
+								<td>🏃</td>
+								<td>poco rischio di collisione</td>
+							</tr>
+							<tr>
+								<td>Una combinazione<br>delle precedenti</td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
 				</section>
 
 				<section>
