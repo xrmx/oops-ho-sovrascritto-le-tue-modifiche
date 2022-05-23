@@ -237,6 +237,22 @@ WHERE id = %s AND version = %s</code></pre>
 					<pre><code data-trim data-noescape class="sql">SELECT xmin from mytable LIMIT 1;</code></pre></p>
 				</section>
 				<section>
+					<h3>xmin in Django</h3>
+					<pre><code data-trim data-noescape class="python small">
+from django.db import models
+from django.db.models import Expression
+
+class XMin(Expression):
+    output_field = models.PositiveIntegerField()
+
+    def as_postgresql(self, compiler, connection):
+        return f'"{compiler.query.base_table}"."xmin"', ()
+					</code></pre>
+					<pre><code data-trim data-noescape class="python small">
+					Talk.objects.all().annotate(row_version=XMin())
+					</code></pre>
+				</section>
+				<section>
 					<h3>🎁 Bonus: una piccola applicazione</h3>
 				</section>
 				<section>
