@@ -98,22 +98,30 @@
 				<section>
 					<h3>Capita solo da admin?</h3>
 					<pre><code data-trim data-noescape class="python small">
-# processo 1                   # processo 2
-m = M.objects.get(f=”pycon22”)
-m.greetings = "👋"
-                               M.objects.update(f=”pycon”)
-m.save()
+# processo 1             # processo 2
+t = Talk.objects.get(
+    name=”oops”
+)
+t.done = True
+                         Talk.objects.update(
+                             name=”more oops”
+                         )
+t.save()
 </code></pre>
 				</section>
 				<section>
 					<h3>In questo caso è facile</h3>
 					<pre><code data-trim data-noescape class="python small">
-# processo 1                   # processo 2
-m = M.objects.get(f=”pycon22”)
-m.greetings = "👋"
-                               M.objects.update(f=”pycon”)
-m.save(update_fields=["greetings"])
-</code></pre>
+# processo 1             # processo 2
+t = Talk.objects.get(
+    name=”oops”
+)
+t.done = True
+                         Talk.objects.update(
+                             name=”more oops”
+                         )
+
+t.save(update_fields=["done"])
 </code></pre>
 				</section>
 				<section>
