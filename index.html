@@ -119,6 +119,14 @@ t.save()
 </code></pre>
 				</section>
 				<section>
+					<h3>save() in SQL</h3>
+					<pre><code data-trim data-noescape class="sql">
+UPDATE "pycon_talk"
+SET "name" = 'oops', "done" = true
+WHERE "pycon_talk"."id" = 1
+					</code></pre>
+				</section>
+				<section>
 					<h3>In questo caso è facile</h3>
 					<pre><code data-trim data-noescape class="python small">
 # processo 1                     # processo 2
@@ -132,6 +140,14 @@ t.done = True
 
 t.save(update_fields=["done"])
 </code></pre>
+				</section>
+				<section>
+					<h3>save(update_fields=[...]) in SQL</h3>
+					<pre><code data-trim data-noescape class="sql">
+UPDATE "pycon_talk"
+SET "done" = true
+WHERE "pycon_talk"."id" = 1
+					</code></pre>
 				</section>
 				<section>
 					<h2>3 possibili strategie</h2>
