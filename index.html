@@ -210,12 +210,12 @@ WHERE "pycon_talk"."id" = 1
 				<section>
 					<h3>select_for_update</h3>
 					<pre><code data-trim data-noescape class="python">
-offices = (
-    Office.objects.select_for_update()
-    .filter(city=city)
+talks = (
+    Talk.objects.select_for_update()
+    .filter(day=day)
 )
 with transaction.atomic():
-    for office in offices:
+    for talk in talks:
         ...
 </code></pre>
 				</section>
