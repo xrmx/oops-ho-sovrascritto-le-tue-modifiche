@@ -317,6 +317,10 @@ class FooAdmin(OptimisticAdminMixin, admin.ModelAdmin):
     form = FooForm</code></pre>
 				</section>
 				<section>
+					<h3>Risultato</h3>
+					<p>Non è possibile salvare se <em>row_version</em> è stata aggiornata nel frattempo</p>
+				</section>
+				<section>
 					<h3>Conclusioni</h3>
 					<ul>
 						<li>tenere un log delle modifiche per evitare di perdere dati</li>
