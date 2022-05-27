@@ -257,8 +257,11 @@ WHERE id = %s AND version = %s</code></pre>
 				</section>
 
 				<section>
-					<h3>Detour: concorrenza di PostgreSQL</h3>
-					<p>MVCC (Multi-Version Concurrency Control):<br>si crea una nuova riga con id di transazione maggiore e poi il <em>VACUUM</em> elimina quelle vecchie</p>
+					<h3>Concorrenza in PostgreSQL</h3>
+					<p>MVCC (Multi-Version Concurrency Control):<br>alla modifica di una riga si crea una nuova riga con id di transazione maggiore e poi il <em>VACUUM</em> elimina quelle vecchie</p>
+				</section>
+				<section>
+					<h3>Concorrenza in PostgreSQL</h3>
 					<p>L'id di transazione si chiama <em>xmin</em>:
 					<pre><code data-trim data-noescape class="sql">SELECT xmin from mytable LIMIT 1;</code></pre></p>
 				</section>
