@@ -237,7 +237,7 @@ with transaction.atomic():
 				<section>
 					<h3>Concorrenza ottimistica in SQL</h3>
 					<pre><code data-trim data-noescape class="sql">
-UPDATE mymodel
+UPDATE pycon_talk
 SET version = version + 1, ...
 WHERE id = %s AND version = %s</code></pre>
 				</section>
