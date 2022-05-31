@@ -212,7 +212,7 @@ WHERE "pycon_talk"."id" = 1
 					<pre><code data-trim data-noescape class="python">
 talks = (
     Talk.objects.select_for_update()
-    .filter(day=day)
+    .filter(day=Talk.Day.SUNDAY)
 )
 with transaction.atomic():
     for talk in talks:
