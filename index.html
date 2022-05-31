@@ -304,17 +304,17 @@ class XMin(Expression):
 					<pre><code data-trim data-noescape class="python small">
 from optimisticadmin.mixins import OptimisticAdminModelFormMixin
 
-class FooForm(OptimisticAdminModelFormMixin, forms.ModelForm):
+class TalkForm(OptimisticAdminModelFormMixin, forms.ModelForm):
     row_version = forms.IntegerField(
         required=False, widget=forms.HiddenInput()
     )</code></pre>
 					<pre><code data-trim data-noescape class="python small">
 from optimisticadmin.mixins import OptimisticAdminMixin
-from .forms import FooForm
+from .forms import TalkForm
 
-@admin.register(Foo)
-class FooAdmin(OptimisticAdminMixin, admin.ModelAdmin):
-    form = FooForm</code></pre>
+@admin.register(Talk)
+class TalkAdmin(OptimisticAdminMixin, admin.ModelAdmin):
+    form = TalkForm</code></pre>
 				</section>
 				<section>
 					<h3>Risultato</h3>
