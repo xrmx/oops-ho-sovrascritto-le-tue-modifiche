@@ -233,7 +233,7 @@ with transaction.atomic():
 				<section>
 					<h3>Concorrenza ottimistica</h3>
 					<p>Aggiorno solo quello che mi aspetto senza prendere lock</p>
-					<p>⚠️  le operazioni possono non avere effetti o fallire ⚠️</p>
+					<p><span class="no-print">⚠️< /span>Le operazioni possono non avere effetti o fallire <span class="no-print">⚠️</span></p>
 				</section>
 				<section>
 					<h3>Concorrenza ottimistica in SQL</h3>
@@ -283,7 +283,7 @@ class XMin(Expression):
 					</code></pre>
 				</section>
 				<section>
-					<h3>🎁 Bonus: una piccola applicazione</h3>
+					<h3><span class="no-print">🎁 </span>Bonus: una piccola applicazione</h3>
 				</section>
 				<section>
 					<h3>Problema: corsa critica tra admin e sistema ad eventi</h3>
@@ -342,20 +342,20 @@ class TalkAdmin(OptimisticAdminMixin, admin.ModelAdmin):
 						<tbody>
 							<tr>
 								<td>Log modifiche</td>
-								<td>👍</td>
-								<td>💪</td>
+								<td><span class="no-print">👍</span><span class="only-print">no</span></td>
+								<td><span class="no-print">💪</span><span class="only-print">robusta</span></td>
 								<td>audit, recovery</td>
 							</tr>
 							<tr>
 								<td>Locking righe</td>
-								<td>👍</td>
-								<td>💪</td>
+								<td><span class="no-print">👍</span><span class="only-print">no</span></td>
+								<td><span class="no-print">💪</span><span class="only-print">robusta</span></td>
 								<td>assegnazione risorse,<br>soldi :)</td>
 							</tr>
 							<tr>
 								<td>Concorrenza<br>ottimistica</td>
-								<td>⚠️</td>
-								<td>🏃</td>
+								<td><span class="no-print">⚠️</span><span class="only-print">si</span></td>
+								<td><span class="no-print">🏃</span><span class="only-print">perf</span></td>
 								<td>poco rischio di collisione</td>
 							</tr>
 							<tr>
